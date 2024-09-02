@@ -4,6 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Logo from '@/images/pardy.png'
 import { Button } from '@nextui-org/react'
+import { usePathname } from 'next/navigation'
+import clsx from 'clsx'
 
 const links = [
   { route: '/dashboard', name: 'Home' },
@@ -13,7 +15,16 @@ const links = [
   { route: '/dashboard/settings', name: 'Settings' },
 ]
 
+const isActive = (path: string, route: string) => {
+  if (route === '/dashboard') {
+    return path === '/dashboard'
+  } else {
+    return path.includes(route)
+  }
+}
+
 const Side = () => {
+  const path = usePathname()
   const activeClass = 'bg-primary hover:bg-primary'
 
   return (
@@ -28,7 +39,10 @@ const Side = () => {
           <div className="w-full" key={link.route}>
             <Link href={link.route}>
               <div
-                className={`w-full h-full py-2 px-2 hover:bg-content1 rounded-lg `}
+                className={clsx(
+                  'w-full h-full py-2 px-2 hover:bg-content1 rounded-lg',
+                  isActive(path, link.route) && activeClass
+                )}
               >
                 {link.name}
               </div>
